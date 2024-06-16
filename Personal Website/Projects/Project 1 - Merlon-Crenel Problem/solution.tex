@@ -1,0 +1,92 @@
+Given the equation for the total length of the wall:
+\[
+W = nM + (n-1)C
+\]
+
+Rearrange and consider modulo \(n\):
+\[
+nM = W - (n-1)C
+\]
+\[
+nM \pmod{n} \equiv W - (n-1)C \pmod{n}
+\]
+
+Since \(nM \equiv 0 \pmod{n}\), the equation reduces to:
+\[
+(n-1)C \equiv W \pmod{n}
+\]
+
+Which reduces to:
+\[
+C \equiv -W \pmod{n}
+\]
+
+This means:
+\[
+C = kn - W
+\]
+
+for some integer \(k\). For \(C\) to be positive:
+\[
+kn - W > 0
+\]
+\[
+kn > W
+\]
+\[
+k > \frac{W}{n}
+\]
+
+Now, substitute \(C\) back into the original equation:
+\[
+W = nM + (n-1)C
+\]
+\[
+W = nM + (n-1)(kn - W)
+\]
+\[
+W = nM + (n-1)kn - (n-1)W
+\]
+\[
+W + (n-1)W = nM + (n-1)kn
+\]
+\[
+nW = nM + (n-1)kn
+\]
+\[
+W = M + (n-1)k
+\]
+\[
+M = W - (n-1)k
+\]
+
+For \(M\) to be positive:
+\[
+W - (n-1)k > 0
+\]
+\[
+W > (n-1)k
+\]
+\[
+k < \frac{W}{n-1}
+\]
+
+Combining the constraints for \(k\):
+\[
+\frac{W}{n} < k < \frac{W}{n-1}
+\]
+
+Thus, \(k\) must be an integer within the range:
+\[
+\left\lceil \frac{W}{n} \right\rceil \leq k \leq \left\lfloor \frac{W}{n-1} \right\rfloor
+\]
+
+For each valid \(k\), calculate:
+\[
+C = kn - W
+\]
+\[
+M = W - (n-1)k
+\]
+
+These calculations will give all possible pairs of integer values \( (M, C) \) that satisfy the given wall length \( W \) and number of merlons \( n \).

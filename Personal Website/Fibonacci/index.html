@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fibonacci Puzzle</title>
+    <link rel="icon" href="images/fibonacci-favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+    <script src="tabs.js"></script>
+    <script src="game.js"></script>
+</head>
+<body>
+    <div id="history" class="history">
+        <div class="close-button-outer">
+            <a href="javascript:void(0)" class="close-button" onclick="closeHist()">&times;</a>
+        </div>
+        <div class="history-outer">
+            <div class="history-text">
+                <h2>History</h2>
+            </div>
+            <div class="history-list"></div>
+            <p style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; text-align: center; color: #666; margin-top: -100px;">© Liam Quilty, 2024</p>
+        </div>
+    </div>
+    <div id="main">
+        <h1 style="text-align: center; font-family: Verdana, Geneva, Tahoma, sans-serif;">The Fibonacci Puzzle</h1>
+        <button class="open-button" onclick="openHist()"><i class="fas fa-history"></i></button>
+        <nav class="navbar">
+            <a href="#game" class="nav-link" id="game-link">Game</a>
+            <a href="#how-to-play" class="nav-link" id="how-to-play-link">How to Play</a>
+            <a href="#math" class="nav-link" id="math-link">Math Behind the Scenes</a>
+            <a href="#contact" class="nav-link" id="contact-link">Contact</a>
+        </nav>
+        <div id="lights-out" class="tab-content">
+            <div class="controls">
+                <div class="control-group">
+                    <label for="grid-size">Grid Size:</label>
+                    <input type="number" id="grid-size" min="3" max="10" value="5">
+                </div>
+                <div class="control-group">
+                    <label for="on-color">On Color:</label>
+                    <input type="color" id="on-color" value="#fdd452">
+                </div>
+                <div class="control-group">
+                    <button id="set-size-button">Set Size</button>
+                </div>
+            </div>
+            <div id="win-counter" class="win-counter">
+                <p id="win-counter-text">Wins: 0</p>
+            </div>
+            <div class="boards-container">
+                <div class="grid-container-outer">
+                    <p>Your Grid:</p>
+                    <div class="grid-container"></div>
+                </div>
+                <div class="target-grid-container-outer">
+                    <p>Target Grid:</p>
+                    <div class="target-grid-container"></div>
+                </div>
+            </div>
+            <button id="reset-button">Reset</button>
+            <div class="hint-section">
+                <div class="code-block-outer" id="code-block-outer">
+                    <code id="code-text" class="code-text">
+                        Buongiorno young fellow! Click the 'Find Solution' button below and I will try to find a solution for the puzzle at hand if you get stuck.
+                    </code>
+                </div>
+                <button class="solution-button" id="solution-button">Find Solution</button>
+            </div>
+        </div>
+        <div id="info" class="tab-content"> <!-- Content for the How to Play tab -->
+            <h2>How to Play</h2>
+            <p>If you've ever heard of the <i>Lights Out!</i> game then you'll be very familiar with the Fibonacci puzzle.</p>
+            <hr style="width: 50%;">
+            <h3>Historical Context + Comparison</h3>
+            <p>The <i>Lights Out!</i> game was released by Tiger Electronics in 1995, an American toy manufactorer. The original game just consisted of a 5x5 grid where a random number of lights would turn on and the player had to turn them all off. Hence the name of the game.</p>
+            <p>This game is very similar, except you must get to a certain position on the board starting from a blank position. Also, the Fibonacci puzzle allows for grid sizes from 3 to 10, whereas the original Lights Out puzzle, was limited to just a 5x5 grid.</p>
+            <hr style="width: 50%;">
+            <h3>Guide to the Fibonacci Puzzle</h3>
+            <p>The game itself is very intuitive. You click tiles and the adjacent ones will activate, try to match your grid to the target grid to win! You can adjust the size of the grid from 3 to 10. However, if you adjust the grid you will lose your current progress. Also on top of the grid the player has the option to choose the color of his/her grid color, although the color of the target grid cannot be changed. Additionally, on the top left of the screen you will see your move history. You may revert back to an old position if you found it of interest and you may continue where you left of with no repricussions towards you. For what the (i,j)↦k means, please visit the Math Behind the Scenes section.</p>
+        </div>
+        <div id="math" class="tab-content"> <!-- Content for the Math Behind the Scenes tab -->
+            <h2>Math Behind the Scenes</h2>
+            <p>Whew, the math for this one is definitely more difficult than I enjoy, but it was fun to do it nonetheless.</p>
+            <hr style="width: 50%">
+            <h3>Important Notice</h3>
+            <p>I should note, that I do all these problems for <b>fun</b> and I try to do them <b>independently</b> to have the satisfcation of solving these problems on my own. So if a solution already exists or if you know of a better way to solve these problems don't hesitate to reach out to me, I'm always ready to learn more! See Contact for more information. Thanks!</p>
+            <hr style="width: 50%">
+            <h3>Definitions</h3>
+            <p>
+                I think definitions is a good place to start. Naturally, someone may think that the best way to tackel this problem is to consider the grid as a nxn grid. While this train of thought is good, I took an alternative approach. Firstly, consider a 3x3 for convenience, and consider a linear mapping that converts all 2D pairs (i,j) into a one value k. The most inuitive mapping, I think, is the one I took.
+                \[
+                k = (i-1) \cdot n + j
+                \]
+                For a 3x3 grid we have:
+                \begin{matrix}
+                (1,1) \to 1 & (1,2) \to 2 & (1,3) \to 3 \\
+                (2,1) \to 4 & (2,2) \to 5 & (2,3) \to 6 \\
+                (3,1) \to 7 & (3,2) \to 8 & (3,3) \to 9
+                \end{matrix}
+                Now we may store a state of a grid as a column vector \(\textbf{x}\). Each row in the column vector represents one different cell we can click in the grid. So therefore we need something to tell us what cells will be affected by us clicking the tile in the same row as out column vector. This can be represented as a \(9\times 9\) matrix, or more generally a \(n^2\times n^2\), matrix full of the information telling us which cels have flipped. Therefore we have two cases:
+                \[
+                \mathbf{T}[k_1,k_2]=
+                \begin{cases}
+                    0 & \text{Cell is Unchanged}\\
+                    1 & \text{Cell Changes}
+                \end{cases}
+                \]
+                For \(n=3\) we must consider the top left cell first. Now, the cells which will be clicked are the top-left, self-toggilization, top-middle, and middle-left. Call this matrix the toggle matrix, \(\mathbf{T}_3\). In the top row of row of the 3x3 grid, the leftmost two are affected, this is represented as 1,1,0. On the second row, only the left-most one is toggled, this is represented as 1,0,0. Finally, on the third row, none of the cells have been toggled, this is represented as 0,0,0. Concatenate all these to get the first of the matrix \(\mathbf{T}_3\), which represents the transformation of the grid upon clicking that cell. Remember this definition for later usage. Computing all the rows of \(\mathbf{T}_3\) by repeating a similar process:
+                \[
+                \mathbf{T}_3 = \begin{pmatrix}
+                1 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+                1 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 0 \\
+                0 & 1 & 1 & 0 & 0 & 1 & 0 & 0 & 0 \\
+                1 & 0 & 0 & 1 & 1 & 0 & 1 & 0 & 0 \\
+                0 & 1 & 0 & 1 & 1 & 1 & 0 & 1 & 0 \\
+                0 & 0 & 1 & 0 & 1 & 1 & 0 & 0 & 1 \\
+                0 & 0 & 0 & 1 & 0 & 0 & 1 & 1 & 0 \\
+                0 & 0 & 0 & 0 & 1 & 0 & 1 & 1 & 1 \\
+                0 & 0 & 0 & 0 & 0 & 1 & 0 & 1 & 1
+                \end{pmatrix}
+                \]
+                To intuitively think about this formula, recall the definition of matrix multiplication. Each row will multiply to each row, which in this case, for each grid vector, is length 1. Which means that the only row in the toggle matrix that will affect the grid as a whole is the cell on the grid which we are toggling. This matrix simply conveys the information on what to toggle. Next we define each move in terms of vectors. We can only toggle one cell at at time, so we represent clicking the \(i\)th cell as \(e_i\), so the cells that are toggled are represented \(\textbf{T}_ne_i\).
+                Where, for example:
+                \[
+                e_1 = \begin{pmatrix}
+                1 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\
+                \end{pmatrix},
+                e_2 = \begin{pmatrix}
+                0 \\ 1 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\
+                \end{pmatrix},
+                e_3 = \begin{pmatrix}
+                0 \\ 0 \\ 1 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\
+                \end{pmatrix},
+                e_4 = \begin{pmatrix}
+                0 \\ 0 \\ 0 \\ 1 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\
+                \end{pmatrix},\ldots
+                \]
+            </p>
+            <hr style="width: 50%">
+            <h3>Setting up the Equation</h3>
+            <p>
+                It should also be noted that we will consider \(\mathbb{F}_2\) for the binary representation of the grid elements. We require that the target vector \(\textbf{b}\) be a combination of \(\textbf{x}\) and any linear \(e_i\). Therefore, it follows that:
+                \[
+                \mathbf{b}=\mathbf{x}+\mathbf{T}_n\sum_{i}e_i
+                \]
+            </p>
+            <hr style="width: 50%">
+            <h3>Exploring Properties Over \(\mathbb{F}_2\)</h3>
+            <p>
+                Since this equation is over \(\mathbb{F}_2\) we know that addition is equivalent to XOR and multiplication is equivalent to AND. This is because \(0+0=0\), \(1+0=1\), \(0+1=1\), and \( 1 + 1 = 2 \equiv0\mod 2\) over \(\mathbb{F}_2\) for addition, this is the same logic as in a XOR gate. A similar process for multiplication to realize this is the same logic as an AND gate, however this is left as an exercise to the reader. Now let's prove a few properties, we require a few things. Firstly, let's make some easier notation \(\{3,7,8\}\) represent that we clicked the 3rd cell then clicked the 7th cell, then clicked the 8th cell. Counting from the top left corner across to the right then down a row then right all the way again. Intuitively, this should give us the same result as the clicking the cells in the order \(\{8,7,3\}\), this boils down to proving commutivity.
+                \[
+                \forall a,b\in\mathbb{F}_2, a+b=b+a
+                \]
+            </p>
+            <p>
+                Commutivity is obvious because order of moves is simply addition and we've seen that is equivalent to the logical XOR operation which is trivially commutative, hence the order of moves in this puzzle is also commutative. In other words:
+                \[
+                \mathbf{x}_1=\mathbf{T}_ne_i
+                \]
+                \[
+                \mathbf{x}_2=\mathbf{T}_n(e_i+e_j)
+                \]
+                \[
+                \mathbf{x}_3=\mathbf{T_n}e_j
+                \]
+                \[
+                \mathbf{x}_4=\mathbf{T}_n(e_j+e_i)
+                \]
+                \[
+                \mathbf{x}_2=\mathbf{T}_n(e_i+e_j)=\mathbf{T}_n(e_j+e_i)=\mathbf{x}_4
+                \]
+            </p>
+            <p>
+                We can also prove another critical property. Over \(\mathbb{F}_2\) we have:
+                \[
+                \forall a\in\mathbb{F}_2, a+a=0
+                \]
+                Which boils down to say that if we click a tile then click it again, it will not change, which is true.
+            </p>
+            <hr style="width: 50%">
+            <h3>Example</h3>
+            <p>
+                Let's say I want to to turn only the top middle on for a 3x3 grid, I can press the cells \(\{5,7,8,9\}\). You can check, this is true! Consider it in the following form:
+                \[
+                \mathbf{x}+\mathbf{T}_3e_5+\mathbf{T}_3e_7+\mathbf{T}_3e_8+\mathbf{T}_3e_9
+                \]
+                Let \( \mathbf{x} \) be a zero vector for simplicity:
+                \[
+                \mathbf{x} = \begin{pmatrix}
+                0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0
+                \end{pmatrix}
+                \]
+                The toggle matrix \( \mathbf{A}_3 \) for a \( 3 \times 3 \) grid is given by:
+                \[
+                \mathbf{T}_3 = \begin{pmatrix}
+                1 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+                1 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 0 \\
+                0 & 1 & 1 & 0 & 0 & 1 & 0 & 0 & 0 \\
+                1 & 0 & 0 & 1 & 1 & 0 & 1 & 0 & 0 \\
+                0 & 1 & 0 & 1 & 1 & 1 & 0 & 1 & 0 \\
+                0 & 0 & 1 & 0 & 1 & 1 & 0 & 0 & 1 \\
+                0 & 0 & 0 & 1 & 0 & 0 & 1 & 1 & 0 \\
+                0 & 0 & 0 & 0 & 1 & 0 & 1 & 1 & 1 \\
+                0 & 0 & 0 & 0 & 0 & 1 & 0 & 1 & 1
+                \end{pmatrix}
+                \]
+                The unit vectors are:
+                \[
+                \mathbf{e}_5 = \begin{pmatrix}
+                0 \\ 0 \\ 0 \\ 0 \\ 1 \\ 0 \\ 0 \\ 0 \\ 0
+                \end{pmatrix},
+                \mathbf{e}_7 = \begin{pmatrix}
+                0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 1 \\ 0 \\ 0
+                \end{pmatrix},
+                \mathbf{e}_8 = \begin{pmatrix}
+                0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 1 \\ 0
+                \end{pmatrix},
+                \mathbf{e}_9 = \begin{pmatrix}
+                0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 1
+                \end{pmatrix}
+                \]
+                Compute every \( T\mathbf{e}_i \), recalling that we are taking these operations over \(\mathbb{F}_2\):
+                \[
+                T\mathbf{e}_5 = \mathbf{T}_3 \begin{pmatrix}
+                0 \\ 0 \\ 0 \\ 0 \\ 1 \\ 0 \\ 0 \\ 0 \\ 0
+                \end{pmatrix} = \begin{pmatrix}
+                0 \\ 1 \\ 0 \\ 1 \\ 1 \\ 1 \\ 0 \\ 1 \\ 0
+                \end{pmatrix},
+                T\mathbf{e}_7 = \mathbf{T}_3 \begin{pmatrix}
+                0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 1 \\ 0 \\ 0
+                \end{pmatrix} = \begin{pmatrix}
+                0 \\ 0 \\ 0 \\ 1 \\ 0 \\ 0 \\ 1 \\ 1 \\ 0
+                \end{pmatrix},
+                T\mathbf{e}_8 = \mathbf{T}_3 \begin{pmatrix}
+                0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 1 \\ 0
+                \end{pmatrix} = \begin{pmatrix}
+                0 \\ 0 \\ 0 \\ 0 \\ 1 \\ 0 \\ 1 \\ 1 \\ 1
+                \end{pmatrix},
+                T\mathbf{e}_9 = \mathbf{T}_3 \begin{pmatrix}
+                0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 1
+                \end{pmatrix} = \begin{pmatrix}
+                0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 1 \\ 0 \\ 1 \\ 1
+                \end{pmatrix}
+                \]
+                Sum the vectors, again recall we are are working in \(\mathbb{F}_2\):
+                \[
+                A\mathbf{e}_5 + A\mathbf{e}_7 + A\mathbf{e}_8 + A\mathbf{e}_9 = \begin{pmatrix}
+                0 \\ 1 \\ 0 \\ 1 \\ 1 \\ 1 \\ 0 \\ 1 \\ 0
+                \end{pmatrix} \oplus \begin{pmatrix}
+                0 \\ 0 \\ 0 \\ 1 \\ 0 \\ 0 \\ 1 \\ 1 \\ 0
+                \end{pmatrix} \oplus \begin{pmatrix}
+                0 \\ 0 \\ 0 \\ 0 \\ 1 \\ 0 \\ 1 \\ 1 \\ 1
+                \end{pmatrix} \oplus \begin{pmatrix}
+                0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 1 \\ 0 \\ 1 \\ 1
+                \end{pmatrix}
+                \]
+                Performing the XOR operation element-wise:
+                \[
+                \begin{pmatrix}
+                0 \oplus 0 \oplus 0 \oplus 0\\ 1 \oplus 0 \oplus 0 \oplus 0 \\ 0 \oplus 0 \oplus 0 \oplus 0 \\ 1 \oplus 1 \oplus 0 \oplus 0 \\ 1 \oplus 0 \oplus 1 \oplus 0 \\ 1 \oplus 0 \oplus 0 \oplus 1 \\ 0 \oplus 1 \oplus 1 \oplus 0 \\ 1 \oplus 1 \oplus 1 \oplus 1 \\ 0 \oplus 0 \oplus 1 \oplus 1
+                \end{pmatrix}
+                = \begin{pmatrix}
+                0 \\ 1 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0
+                \end{pmatrix}
+                \]
+                Thus, the result of \( \mathbf{x} + A\mathbf{e}_5 + A\mathbf{e}_7 + A\mathbf{e}_8 + A\mathbf{e}_9 \) is:
+                \[
+                \begin{pmatrix}
+                0 \\ 1 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0
+                \end{pmatrix}
+                \]
+                As desired.
+            </p>
+        </div>
+        <div id="contact" class="tab-content"> <!-- Content for the Contact tab -->
+            <h2>Contact</h2>
+            <p>My name is Liam, I make little projects like these all the time. Check out my socials below!</p>
+            <div class="social-media-icons">
+                <a href="https://www.facebook.com" target="_blank" class="fa fa-facebook"></a>
+                <a href="https://www.twitter.com" target="_blank" class="fa fa-twitter"></a>
+                <a href="https://www.linkedin.com/in/liam-quilty-a45591251/" target="_blank" class="fa fa-linkedin"></a>
+                <a href="https://github.com/XxMrFancyu2xX" target="_blank" class="fa fa-github"></a>
+                <a href="" target="_blank" class="fa fa-envelope"></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

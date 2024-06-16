@@ -1,0 +1,321 @@
+body {
+    padding-top: 20px; /* Add padding to the top of the body */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Changed to flex-start to avoid center alignment issues */
+    background-color: #f0f0f0;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+}
+
+#main {
+    position: relative;
+    width: 100%;
+    padding-top: 60px; /* Ensure enough padding at the top for nav */
+    transition: 0.5s;
+}
+
+#lights-out {
+    text-align: center;
+    background: #f0f0f0;
+    padding: 20px;
+}
+
+.tab-content {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    position: relative;
+    margin: 20px auto 0 auto;
+    max-width: 800px;
+    display: none;
+    text-align: center;
+}
+
+.tab-content.show {
+    opacity: 1;
+    display: block;
+}
+
+nav.navbar {
+    display: flex;
+    justify-content: space-around;
+    background-color: #f0f0f0;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.nav-link {
+    color: grey;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px;
+    transition: color 0.3s, border-bottom 0.3s;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: black;
+    border-bottom: 2px solid black;
+}
+
+.win-counter {
+    color: #222;
+    font-size: 18px;
+    margin: auto;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+}
+
+.control-group label {
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.control-group input[type="number"] {
+    width: 60px;
+    padding: 5px;
+    font-size: 16px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.control-group input[type="color"] {
+    width: 40px;
+    height: 40px;
+    border: none;
+    padding: 0;
+    margin-right: 10px;
+}
+
+.control-group button {
+    padding: 10px 20px;
+    background-color: #138cff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    transition: background-color 0.4s;
+}
+
+.control-group button:hover {
+    background-color: #0056b3;
+}
+
+.boards-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.grid-container,
+.target-grid-container {
+    display: grid;
+    gap: 10px;
+    justify-content: center;
+}
+
+.grid-item {
+    width: 60px;
+    height: 60px;
+    background-color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    border-radius: 2px;
+}
+
+.grid-item:hover {
+    transform: scale(1.1);
+}
+
+.grid-item:active {
+    transform: scale(0.9);
+}
+
+.grid-item.on {
+    background-color: #fdd452;
+}
+
+#reset-button {
+    padding: 10px 20px;
+    background-color: #138cff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    transition: background-color 0.4s;
+    width: 80%;
+}
+
+#reset-button:hover {
+    background-color: #0056b3;
+}
+
+.code-block-outer {
+    background-color: #ddd;
+    width: 100%;
+    height: 400px;
+    margin-top: 40px;
+    border-radius: 20px;
+    border: 1px inset #bbb;
+    margin-bottom: 20px;
+    padding: 10px;
+    text-align: left;
+}
+
+.solution-button {
+    padding: 10px 20px;
+    background-color: #138cff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    transition: background-color 0.4s;
+    width: 80%;
+}
+
+.solution-button:hover {
+    background-color: #0056b3;
+}
+
+#revert-button {
+    padding: 10px 20px;
+    background-color: #138cff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    transition: background-color 0.4s;
+}
+
+#revert-button:hover {
+    background-color: #0056b3;
+}
+
+.mini-grid-container {
+    display: grid;
+    gap: 5px;
+    margin-bottom: 5px;
+    justify-content: center;
+    grid-template-columns: repeat(5, 30px);
+}
+
+.mini-grid-container-item {
+    width: 30px;
+    height: 30px;
+    background-color: #333;
+    border-radius: 1px;
+}
+
+.history {
+    height: 100%;
+    width: 0; 
+    position: fixed; 
+    z-index: 1; 
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    overflow-x: hidden; 
+    overflow-y: auto; /* Ensure vertical scrolling */
+    padding-top: 60px; 
+    transition: 0.5s;
+}
+
+.history .close-button {
+    color: #bbb;
+    text-decoration: none;
+    transition: color 0.4s, transform 0.4s;
+}
+
+.history .close-button:hover {
+    color: #138cff;
+    transform: rotate(270deg);
+}
+
+.close-button-outer {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 72px;
+    transition: transform 0.4s;
+}
+
+.open-button {
+    position: fixed;
+    font-size: 40px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    color: #bbb;
+    padding: 10px 10px;
+    border: none;
+    top: 10px;
+    left: 10px;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.open-button:hover {
+    color: #444;
+    transform: scale(1.2);
+}
+
+.history-text {
+    color: #999;
+    font-family: 'Roboto', 'sans-serif';
+    text-align: center;
+
+}
+
+.history-list {
+    text-align: center;
+    color: #999;
+    padding: 0px 25px 100px 25px;
+}
+
+.history-item {
+    border-radius: 16px;
+    border-color: #666;
+    border: 2px solid;
+    background-color: #fff;
+    justify-content: center;
+    padding: 10px;
+    margin: 10px 0px 10px 0px;
+}
+
+.social-media-icons {
+    margin-top: 20px;
+}
+
+.social-media-icons a {
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 24px;
+    color: #666;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.social-media-icons a:hover {
+    color: #000;
+    transform: scale(1.2);
+}
+
+@media screen and (max-height: 450px) {
+    .history {padding-top: 15px;}
+}

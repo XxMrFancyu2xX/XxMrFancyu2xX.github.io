@@ -1,0 +1,62 @@
+The Collatz conjecture is an unsolved problem in mathematics that involves a sequence defined as follows: start with any positive integer \(n\). Then each term is obtained from the previous term as follows:
+\begin{itemize}
+    \item If the previous term is even, the next term is one half of the previous term.
+    \item If the previous term is odd, the next term is three times the previous term plus one.
+\end{itemize}
+The conjecture states that no matter what value of \(n\) you start with, the sequence will always eventually reach 1.
+
+We define the set \(N_k\) as follows:
+\[
+N_k = \{ n \in \mathbb{N} \mid n \geq k, k \in \mathbb{N} \}
+\]
+
+Suppose we have a number of the form \(2^n + 1\), where \(n \in N_1\). We can prove by induction that this number is odd for all such values.
+
+For \(n = 1\):
+\[
+2^1 + 1 = 2 + 1 = 3
+\]
+3 is odd, so the base case holds.
+
+Assume for some \(k \geq 1\), the number \(2^k + 1\) is odd. We need to show that \(2^{k+1} + 1\) is also odd.
+\[
+2^{k+1} + 1 = 2 \cdot 2^k + 1 = 2m + 1
+\]
+Since \(2m\) is even, \(2m + 1\) is odd. Thus, \(2^{k+1} + 1\) is odd.
+
+By mathematical induction, \(2^n + 1\) is odd for all \(n \in N_1\).
+
+We denote:
+\begin{align*}
+C_0 &= 2^n + 1 \\
+C_1 &= 3 \cdot (2^n + 1) + 1 = 3 \cdot 2^n + 4
+\end{align*}
+
+\begin{itemize}
+    \item \(C_1 = 3^1 \cdot 2^{n-0} + 4\) is even for \(N_1\)
+    \item \(C_2 = 3^1 \cdot 2^{n-1} + 2\) is even for \(N_2\)
+    \item \(C_3 = 3^1 \cdot 2^{n-2} + 1\) is odd for \(N_3\)
+    \item \(C_4 = 3^2 \cdot 2^{n-2} + 4\) is even for \(N_3\)
+    \item \(C_5 = 3^2 \cdot 2^{n-3} + 2\) is even for \(N_4\)
+    \item \(C_6 = 3^2 \cdot 2^{n-4} + 1\) is odd for \(N_5\)
+    \item \(C_7 = 3^3 \cdot 2^{n-4} + 4\) is even for \(N_5\)
+\end{itemize}
+
+\[
+C_k = 3^{a(k)} \cdot 2^{n - b(k)} + c(k)
+\]
+where:
+\begin{align*}
+a(k) &= \left\lfloor \frac{k + 2}{3} \right\rfloor \\
+b(k) &= \left\lfloor \frac{2k}{3} \right\rfloor \\
+c(k) &= 4^k \mod 7
+\end{align*}
+
+\subsection{Behavior of \(C_k\)}
+As \(k \to \infty\):
+\[
+C_k \approx c(k)
+\]
+where \(c(k)\) cycles through \(1, 4, 2\).
+
+We have demonstrated that any number of the form \(2^n + 1\) will eventually reach and enter the repeating cycle \(1, 4, 2\) under the Collatz conjecture rules. This supports the idea that the conjecture holds true for this subset of integers.

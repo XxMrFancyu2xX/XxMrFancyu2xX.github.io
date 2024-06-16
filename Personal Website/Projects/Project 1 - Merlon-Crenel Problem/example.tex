@@ -1,0 +1,60 @@
+For \( W = 100 \) and \( n = 5 \):
+\[
+\frac{100}{5} = 20 \quad \text{and} \quad \frac{100}{4} = 25
+\]
+
+Therefore, \(k\) must satisfy:
+\[
+\lceil 20 \rceil \leq k \leq \lfloor 25 \rfloor
+\]
+\[
+20 \leq k \leq 25
+\]
+
+We test integer values for \(k\) within this range\(:\)
+<br>
+<br>
+1. For \( k = 21 \):
+\[
+C = 21 \cdot 5 - 100 = 5
+\]
+\[
+M = 100 - 4 \cdot 21 = 16
+\]
+
+2. For \( k = 22 \):
+\[
+C = 22 \cdot 5 - 100 = 10
+\]
+\[
+M = 100 - 4 \cdot 22 = 12
+\]
+
+3. For \( k = 23 \):
+\[
+C = 23 \cdot 5 - 100 = 15
+\]
+\[
+M = 100 - 4 \cdot 23 = 8
+\]
+
+4. For \( k = 24 \):
+\[
+C = 24 \cdot 5 - 100 = 20
+\]
+\[
+M = 100 - 4 \cdot 24 = 4
+\]
+
+5. For \( k = 25 \):
+\[
+C = 25 \cdot 5 - 100 = 25
+\]
+\[
+M = 100 - 4 \cdot 25 = 0 \quad \text{(not valid as } M \text{ must be positive)}
+\]
+
+So, the valid pairs \( (M, C) \) are:
+\[
+(16, 5), (12, 10), (8, 15), (4, 20)
+\]
